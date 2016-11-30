@@ -1,0 +1,3 @@
+1. Set Default Location to each Hero
+2. Fill List of Locations & Heroes in Unlocks Manager
+3. Fill Map Connections in Map Navigator
