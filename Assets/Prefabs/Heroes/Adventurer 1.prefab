@@ -188,6 +188,9 @@ MonoBehaviour:
   Strenght: 8
   StrenghtGain: 2
   Speed: 1.5
+  Stamina: 50
+  MaxStamina: 50
+  StaminaRecovery: 3
   GoldToUnlock: 1000
   LocationAssigned: {fileID: 0}
   DefaultLocation: {fileID: 114000011223937194, guid: 088f87285d0458f409aab88562c572b7,

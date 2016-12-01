@@ -15,6 +15,10 @@ public class Hero : MonoBehaviour {
 	public int StrenghtGain;
 	public float Speed;
 
+	public float Stamina;
+	public float MaxStamina;
+	public float StaminaRecovery;
+
 	public int GoldToUnlock;
 
 	public Location LocationAssigned;
@@ -29,6 +33,7 @@ public class Hero : MonoBehaviour {
 
 	void Start ()
 	{
+		Stamina = MaxStamina;
 		NameText.text = Name;
 		HeroIdleTransform = UnlocksManager.instance.HeroesIdleParent;
 		ParentTransform = HeroIdleTransform;
@@ -103,8 +108,6 @@ public class Hero : MonoBehaviour {
 		
 	public IEnumerator MoveHero(Location finalLocation)
 	{
-		//Debug.Log ("Move To " + finalLocation.LocationName);
-
 		if (finalLocation != LocationAssigned)
 		{
 
@@ -137,23 +140,22 @@ public class Hero : MonoBehaviour {
 
 			AssignHero (finalLocation);
 		}
-
-		//Debug.Log ("Move Finished");
-		//return null;
 	}
 
 	public void UpdateHeroStats(float interval)
 	{
-		if (LocationAssigned == null)
-			return;
-
 		if (CurrentState == HeroState.WORKING)
 		{
+			//MB Property with special setter for Stamina???
+			Stamina = Mathf.Max(Stamina - 5f * interval, 0f);
 			EffectText.text = LocationAssigned.CurrentIncome * Prospecting * 0.03f * KingdomManager.instance.GlobalMultiplier + "g";
 			Experience += 50 * interval;
 			if (Experience > 100)
 				LevelUp ();
 		}
+
+		if(CurrentState == HeroState.IDLE && Stamina < MaxStamina)
+			Stamina = Mathf.Min(Stamina + StaminaRecovery * interval, MaxStamina);
 	}
 
 	public void LevelUp ()
