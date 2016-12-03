@@ -9,6 +9,6 @@ public class UpgradeLocationGlobalMultiplierSO : LocationUpgradeSO {
 		KingdomManager.instance.GlobalMultiplier *= upgrade.UpgradeValue;
 
 		foreach (var l in KingdomManager.instance.ActiveLocations)
-			l.UpdateStats ();
+			l.UpdateStats (1);
 	}
 }

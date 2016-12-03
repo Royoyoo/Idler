@@ -24,15 +24,15 @@ public class Location : MonoBehaviour {
 
 	private int mastersCount;
 	public int MastersCount {	get	{ return mastersCount; }
-								set	{ mastersCount = value;	UpdateStats ();	}	}
+								set	{ mastersCount = value;	UpdateStats (1f);	}	}
 
 	private int baseIncome;
 	public int BaseIncome {	get	{ return baseIncome; }
-							set	{ baseIncome = value;	UpdateStats ();	}	}
+							set	{ baseIncome = value;	UpdateStats (1f);	}	}
 
 	private float locationMultiplier;
 	public float LocationMultiplier {	get	{ return locationMultiplier; }
-										set	{ locationMultiplier = value;	UpdateStats ();	}	}
+										set	{ locationMultiplier = value;	UpdateStats (1f);	}	}
 
 	void Start () {
 
@@ -48,6 +48,8 @@ public class Location : MonoBehaviour {
 
 		KingdomManager.instance.ActiveLocations.Add (this);
 		MapNavigator.instance.BuildPaths ();
+
+		Ticker.OnTickEvent += UpdateStats;
 	}
 			
 
@@ -70,7 +72,7 @@ public class Location : MonoBehaviour {
 
 
 	//Called when buying upgrade & adding/removing workers
-	public void UpdateStats()
+	public void UpdateStats(float interval)
 	{
 		CurrentIncome = Mathf.RoundToInt (LocationMultiplier * BaseIncome);
 		MastersBonus = Mathf.RoundToInt (CurrentIncome * MastersCount * 0.2f);

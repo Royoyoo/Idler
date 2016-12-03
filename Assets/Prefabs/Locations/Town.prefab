@@ -61,7 +61,7 @@ GameObject:
   - 114: {fileID: 114000010031330086}
   - 114: {fileID: 114000013882459082}
   - 114: {fileID: 114000011335417564}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Town
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -373,7 +373,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114000011223937194}
+      - m_Target: {fileID: 114000011335417564}
         m_MethodName: RemoveMaster
         m_Mode: 1
         m_Arguments:
@@ -530,10 +530,10 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 1
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -712,7 +712,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114000011223937194}
+      - m_Target: {fileID: 114000011335417564}
         m_MethodName: AddMaster
         m_Mode: 1
         m_Arguments:
@@ -745,10 +745,10 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 1
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -768,6 +768,7 @@ MonoBehaviour:
   UpgradeText: {fileID: 114000010405793298}
   MastersText: {fileID: 114000014036484850}
   HeroPanelTransform: {fileID: 224000011006508514}
+  thisLocation: {fileID: 0}
 --- !u!114 &114000014036484850
 MonoBehaviour:
   m_ObjectHideFlags: 1

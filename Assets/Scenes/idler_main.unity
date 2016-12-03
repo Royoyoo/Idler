@@ -253,11 +253,12 @@ GameObject:
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 507159110}
+  - 224: {fileID: 507159116}
   - 114: {fileID: 507159111}
   - 114: {fileID: 507159109}
   - 114: {fileID: 507159113}
   - 114: {fileID: 507159112}
+  - 114: {fileID: 507159110}
   m_Layer: 0
   m_Name: GameManagers
   m_TagString: Untagged
@@ -289,19 +290,56 @@ MonoBehaviour:
   - {fileID: 114000013232386506, guid: f628ff35c4cf1f34bae61fda379dbe32, type: 2}
   LocationsParent: {fileID: 190303480}
   HeroesIdleParent: {fileID: 1947757987}
---- !u!4 &507159110
-Transform:
+--- !u!114 &507159110
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 507159108}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 334f9f01fc1dd5642b8b1bf9957f5a11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpellButtonGO: {fileID: 1000013888964278, guid: fe8e84f838ec3484986e15939a58f407,
+    type: 2}
+  SpellsParentTransform: {fileID: 1465602626}
+  thisGraphicRaycaster: {fileID: 1157375515}
+  AvailableSpells:
+  - IsActive: 0
+    Name: Global 2x
+    ThisSpellSO: {fileID: 11400000, guid: 80d817ee0b03c274f8d932cdb87b8080, type: 2}
+    ThisSpellType: 0
+    Duration: 10
+    ManaCost: 100
+    Value1: 2
+    Value2: 0
+    Timer: 0
+    SpellButton: {fileID: 0}
+    TargetGO: {fileID: 0}
+  - IsActive: 0
+    Name: Hero Regen
+    ThisSpellSO: {fileID: 11400000, guid: ab9e33b6ca65f22418ed570b1425bd6f, type: 2}
+    ThisSpellType: 1
+    Duration: 5
+    ManaCost: 200
+    Value1: 5
+    Value2: 0
+    Timer: 0
+    SpellButton: {fileID: 0}
+    TargetGO: {fileID: 0}
+  spellInAction:
+    IsActive: 0
+    Name: 
+    ThisSpellSO: {fileID: 0}
+    ThisSpellType: 0
+    Duration: 0
+    ManaCost: 0
+    Value1: 0
+    Value2: 0
+    Timer: 0
+    SpellButton: {fileID: 0}
+    TargetGO: {fileID: 0}
 --- !u!114 &507159111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,6 +412,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Gold: 1000
+  Mana: 0
+  MaxMana: 1000
+  ManaRegen: 50
   MaxMasters: 2
   FreeMasters: 0
   GlobalMultiplier: 0
@@ -381,6 +422,24 @@ MonoBehaviour:
   MastersText: {fileID: 1142603694}
   ActiveLocations: []
   ActiveHeroes: []
+--- !u!224 &507159116
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 507159108}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &553604722
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,7 +740,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
 --- !u!114 &1157375516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -736,6 +795,7 @@ RectTransform:
   - {fileID: 190303480}
   - {fileID: 1503811688}
   - {fileID: 1947757987}
+  - {fileID: 1465602626}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0}
@@ -743,6 +803,74 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1465602625
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 1465602626}
+  - 222: {fileID: 1465602629}
+  - 114: {fileID: 1465602628}
+  m_Layer: 5
+  m_Name: SpellsPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1465602626
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1465602625}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 1157375518}
+  m_RootOrder: 3
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 786.7, y: -10}
+  m_SizeDelta: {x: 203.7, y: 128.6}
+  m_Pivot: {x: 0, y: 1}
+--- !u!114 &1465602628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1465602625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &1465602629
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1465602625}
 --- !u!1 &1503811687
 GameObject:
   m_ObjectHideFlags: 0
@@ -1282,7 +1410,7 @@ Prefab:
     - target: {fileID: 224000013782407246, guid: 517f3c303da398a4eadbc6c49359a3e5,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -460.6
+      value: -429.18
       objectReference: {fileID: 0}
     - target: {fileID: 224000013782407246, guid: 517f3c303da398a4eadbc6c49359a3e5,
         type: 2}

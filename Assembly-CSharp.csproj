@@ -54,9 +54,14 @@
      <Compile Include="Assets\Scripts\LocationUIManager.cs" />
      <Compile Include="Assets\Scripts\LocationUpgradesManager.cs" />
      <Compile Include="Assets\Scripts\MapNavigator.cs" />
+     <Compile Include="Assets\Scripts\ScriptableObjects\Spells\BaseSpellSO.cs" />
+     <Compile Include="Assets\Scripts\ScriptableObjects\Spells\InstantGoldSO.cs" />
+     <Compile Include="Assets\Scripts\ScriptableObjects\Spells\TimedGlobalMultiplierSO.cs" />
+     <Compile Include="Assets\Scripts\ScriptableObjects\Spells\TimedHeroRegenSO.cs" />
      <Compile Include="Assets\Scripts\ScriptableObjects\Upgrades\LocationUpgradeSO.cs" />
      <Compile Include="Assets\Scripts\ScriptableObjects\Upgrades\UpgradeLocationGlobalMultiplierSO.cs" />
      <Compile Include="Assets\Scripts\ScriptableObjects\Upgrades\UpgradeLocationMultiplierSO.cs" />
+     <Compile Include="Assets\Scripts\SpellsManager.cs" />
      <Compile Include="Assets\Scripts\Ticker.cs" />
      <Compile Include="Assets\Scripts\UnlocksManager.cs" />
      <None Include="Assets\Scenes\InitSetup.txt" />

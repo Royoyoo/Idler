@@ -185,17 +185,22 @@ public class MapNavigator : MonoBehaviour {
 				}
 			}
 		}
-		if (path.Count == 0)
-			Debug.Log ("Error: can't build path to this point");
-		nextDirection.NextLocationUID = path [path.Count - 1].LocationUID;
 
-		foreach (var mc in MapConnections)
+		if (path.Count == 0) 
 		{
-			if (currentLocationUID == mc.StartLocation.LocationUID && nextDirection.NextLocationUID == mc.EndLocation.LocationUID ||
-				currentLocationUID == mc.EndLocation.LocationUID && nextDirection.NextLocationUID == mc.StartLocation.LocationUID)
-				nextDirection.BaseDistance = mc.Distance;
+			Debug.Log ("Error: can't build path to this point");
+			nextDirection.NextLocationUID = currentLocationUID;
+			nextDirection.BaseDistance = 0;
 		}
+		else
+		{
+			nextDirection.NextLocationUID = path [path.Count - 1].LocationUID;
 
+			foreach (var mc in MapConnections)
+				if (currentLocationUID == mc.StartLocation.LocationUID && nextDirection.NextLocationUID == mc.EndLocation.LocationUID ||
+				   currentLocationUID == mc.EndLocation.LocationUID && nextDirection.NextLocationUID == mc.StartLocation.LocationUID)
+					nextDirection.BaseDistance = mc.Distance;
+		}
 		return nextDirection;
 	}
 
