@@ -327,6 +327,7 @@ MonoBehaviour:
   UpgradeBonus: 5
   CurrentIncome: 7
   MastersBonus: 0
+  ManaIncome: 2
   UpgradeCostMultiplier: 0.3
   UpgradeBonusMultiplier: 0.25
   GoldToUnlock: 1300

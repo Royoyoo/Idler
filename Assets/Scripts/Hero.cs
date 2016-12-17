@@ -110,7 +110,6 @@ public class Hero : MonoBehaviour {
 	{
 		if (finalLocation != LocationAssigned)
 		{
-
 			Location currentLocation = LocationAssigned;
 
 			if (!LocationAssigned)
@@ -119,6 +118,10 @@ public class Hero : MonoBehaviour {
 			Location nextLocation;
 			Vector3 nextLocationPosition;
 			Vector3 currentPosition = ParentTransform.position;
+			HeroState previousState;
+
+			previousState = CurrentState;
+			CurrentState = HeroState.MOVING;
 
 			do {
 				float dist;
@@ -137,6 +140,8 @@ public class Hero : MonoBehaviour {
 				currentPosition = nextLocationPosition;
 
 			} while (nextLocation != finalLocation);
+
+			CurrentState = previousState;
 
 			AssignHero (finalLocation);
 		}
@@ -164,5 +169,10 @@ public class Hero : MonoBehaviour {
 		Level++;
 		Prospecting += ProspectingGain;
 		Strenght += StrenghtGain;
+	}
+
+	public void UpdateInfoPanel()
+	{
+		InfoPanelManager.instance.UpdateHeroInfo (this);
 	}
 }

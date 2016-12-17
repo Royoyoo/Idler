@@ -15,8 +15,9 @@ public class KingdomManager : MonoBehaviour {
 
 	[HideInInspector]public Text CurrentGoldText;
 	[HideInInspector]public Text MastersText;
+	public Text ManaText;
 
-	public List<Location> ActiveLocations = new List<Location>();
+	[HideInInspector]public List<Location> ActiveLocations = new List<Location>();
 	[HideInInspector]public List<Hero> ActiveHeroes = new List<Hero>();
 
 	public static KingdomManager instance;
@@ -43,13 +44,17 @@ public class KingdomManager : MonoBehaviour {
 	void UpdateUI () {
 		CurrentGoldText.text = (Mathf.CeilToInt(Gold)).ToString() + "g";
 		MastersText.text = "Free Masters: " + FreeMasters + " / " + MaxMasters;
+		ManaText.text = "Mana: " + (int)Mana + " / " + MaxMana;
 	}
 
 	//COLLECT GOLD on Tick by Ticker script
 	public void CollectIncome(float interval)
 	{
 		foreach (var l in ActiveLocations)
+		{
 			Gold += (l.CurrentIncome + l.MastersBonus) * interval * KingdomManager.instance.GlobalMultiplier;
+			Mana += l.ManaIncome * interval;
+		}
 
 		foreach (var h in ActiveHeroes) 
 			if (h.CurrentState == HeroState.WORKING)

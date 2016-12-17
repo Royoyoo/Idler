@@ -10,6 +10,7 @@ public class Location : MonoBehaviour {
 	public int UpgradeBonus;
 	public int CurrentIncome;
 	public int MastersBonus;
+	public float ManaIncome;
 
 	public float UpgradeCostMultiplier;
 	public float UpgradeBonusMultiplier;

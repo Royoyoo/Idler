@@ -47,6 +47,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Hero.cs" />
      <Compile Include="Assets\Scripts\HeroDragManager.cs" />
+     <Compile Include="Assets\Scripts\InfoPanelManager.cs" />
      <Compile Include="Assets\Scripts\KingdomManager.cs" />
      <Compile Include="Assets\Scripts\Location.cs" />
      <Compile Include="Assets\Scripts\LocationDropManager.cs" />
