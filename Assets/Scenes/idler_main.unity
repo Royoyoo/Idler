@@ -100,14 +100,13 @@ GameObject:
   - 224: {fileID: 9294259}
   - 222: {fileID: 9294261}
   - 114: {fileID: 9294260}
-  - 114: {fileID: 9294262}
   m_Layer: 5
   m_Name: InfoPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9294259
 RectTransform:
   m_ObjectHideFlags: 0
@@ -165,24 +164,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 9294258}
---- !u!114 &9294262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 9294258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9c4644fb6fd33a4aac433a4d4794eec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NameText: {fileID: 1968736610}
-  ProspectingText: {fileID: 346374358}
-  StrengthText: {fileID: 1941301074}
-  StaminaText: {fileID: 1909497377}
-  SpeedText: {fileID: 2053337081}
-  StateButton: {fileID: 1384562222}
-  StateText: {fileID: 597964903}
 --- !u!1001 &186757363
 Prefab:
   m_ObjectHideFlags: 0
@@ -584,7 +565,9 @@ MonoBehaviour:
   ManaRegen: 1
   MaxMasters: 2
   FreeMasters: 0
-  GlobalMultiplier: 0
+  GlobalMultiplier: 1
+  MastersMultiplier: 0.2
+  ProspectingMultiplier: 0.03
   CurrentGoldText: {fileID: 553604724}
   MastersText: {fileID: 1142603694}
   ManaText: {fileID: 1578106170}
@@ -602,7 +585,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -619,6 +602,7 @@ GameObject:
   - 223: {fileID: 535962482}
   - 114: {fileID: 535962481}
   - 114: {fileID: 535962480}
+  - 114: {fileID: 535962484}
   m_Layer: 5
   m_Name: HeroInfo_Canvas
   m_TagString: Untagged
@@ -695,12 +679,32 @@ RectTransform:
   m_Children:
   - {fileID: 9294259}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &535962484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 535962479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9c4644fb6fd33a4aac433a4d4794eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NameText: {fileID: 1968736610}
+  ProspectingText: {fileID: 346374358}
+  StrengthText: {fileID: 1941301074}
+  StaminaText: {fileID: 1909497377}
+  SpeedText: {fileID: 2053337081}
+  StateButton: {fileID: 1384562222}
+  StateText: {fileID: 597964903}
+  InfoPanelGO: {fileID: 9294258}
+  SelectedHero: {fileID: 0}
 --- !u!1 &553604722
 GameObject:
   m_ObjectHideFlags: 0
@@ -1213,7 +1217,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1384562223}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 535962484}
+        m_MethodName: ChangeHeroState
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1384562223
@@ -1703,7 +1718,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!1 &1638924985
 GameObject:
   m_ObjectHideFlags: 0

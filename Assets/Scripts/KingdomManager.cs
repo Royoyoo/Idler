@@ -12,6 +12,8 @@ public class KingdomManager : MonoBehaviour {
 	[HideInInspector]public int FreeMasters;
 
 	public float GlobalMultiplier;
+	public float MastersMultiplier;
+	public float ProspectingMultiplier;
 
 	[HideInInspector]public Text CurrentGoldText;
 	[HideInInspector]public Text MastersText;
@@ -36,7 +38,6 @@ public class KingdomManager : MonoBehaviour {
 		Ticker.OnTickEvent += CollectIncome;
 
 		FreeMasters = MaxMasters;
-		GlobalMultiplier = 1;
 		Mana = MaxMana;
 	}
 
@@ -52,13 +53,13 @@ public class KingdomManager : MonoBehaviour {
 	{
 		foreach (var l in ActiveLocations)
 		{
-			Gold += (l.CurrentIncome + l.MastersBonus) * interval * KingdomManager.instance.GlobalMultiplier;
+			Gold += (l.CurrentIncome + l.MastersBonus) * interval * GlobalMultiplier;
 			Mana += l.ManaIncome * interval;
 		}
 
 		foreach (var h in ActiveHeroes) 
-			if (h.CurrentState == HeroState.WORKING)
-				Gold += h.LocationAssigned.CurrentIncome * h.Prospecting * 0.03f * KingdomManager.instance.GlobalMultiplier;
+			if (h.CurrentState == HeroState.WORKING && h.Stamina > 0)
+				Gold += h.LocationAssigned.CurrentIncome * h.Prospecting * ProspectingMultiplier * GlobalMultiplier;
 
 		UpdateUI ();
 	}

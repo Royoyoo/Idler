@@ -49,6 +49,7 @@ public class Hero : MonoBehaviour {
 	}
 
 	//When Dropped Hero On Location
+	//Rework this method!!!
 	public void AssignHero (Location targetLocation) 
 	{
 		switch (CurrentState) 
@@ -96,6 +97,30 @@ public class Hero : MonoBehaviour {
 			break;
 
 		case HeroState.GUARD:
+				
+			if (!targetLocation)
+			{
+				CurrentState = HeroState.IDLE;
+
+				ParentTransform = HeroIdleTransform;
+				this.transform.SetParent (ParentTransform);
+				transform.localPosition = new Vector3 (0f, 50 - HeroIdleTransform.childCount * 50f, 0f);
+
+				LocationAssigned.HeroesGuarding.Remove (this);
+				LocationAssigned = null;
+				EffectText.text = "";
+			}
+			else
+			{
+				LocationAssigned.HeroesGuarding.Remove (this);
+
+				LocationAssigned = targetLocation;
+				ParentTransform = LocationAssigned.locationUIManager.HeroPanelTransform;
+				this.transform.SetParent (ParentTransform);
+				this.transform.localPosition = new Vector3 (0f, 0f, 0f);
+
+				LocationAssigned.HeroesGuarding.Add (this);
+			}
 			break;
 
 		case HeroState.MOVING:
@@ -119,6 +144,11 @@ public class Hero : MonoBehaviour {
 			Vector3 nextLocationPosition;
 			Vector3 currentPosition = ParentTransform.position;
 			HeroState previousState;
+
+			if (CurrentState == HeroState.WORKING)
+				LocationAssigned.HeroesWorking.Remove (this);
+			else if (CurrentState == HeroState.GUARD)
+				LocationAssigned.HeroesGuarding.Remove (this);
 
 			previousState = CurrentState;
 			CurrentState = HeroState.MOVING;
@@ -151,24 +181,43 @@ public class Hero : MonoBehaviour {
 	{
 		if (CurrentState == HeroState.WORKING)
 		{
-			//MB Property with special setter for Stamina???
 			Stamina = Mathf.Max(Stamina - 5f * interval, 0f);
-			EffectText.text = LocationAssigned.CurrentIncome * Prospecting * 0.03f * KingdomManager.instance.GlobalMultiplier + "g";
-			Experience += 50 * interval;
-			if (Experience > 100)
-				LevelUp ();
+			if(Stamina > 0)
+				EffectText.text = LocationAssigned.CurrentIncome * Prospecting * KingdomManager.instance.ProspectingMultiplier * KingdomManager.instance.GlobalMultiplier + "g";
+			else
+				EffectText.text = "0g";
+			
+			UpdateExp (interval);
 		}
 
+		if (CurrentState == HeroState.GUARD)
+		{
+			Stamina = Mathf.Max (Stamina - 5f * interval, 0f);
+			if(Stamina > 0)
+				EffectText.text = Strenght + " str";
+			else
+				EffectText.text = "powerless";
+			
+			UpdateExp (interval);
+		}	
+
 		if(CurrentState == HeroState.IDLE && Stamina < MaxStamina)
+		{
 			Stamina = Mathf.Min(Stamina + StaminaRecovery * interval, MaxStamina);
+			EffectText.text = "Resting...";
+		}
 	}
 
-	public void LevelUp ()
+	public void UpdateExp (float interval)
 	{
-		Experience -= 100;
-		Level++;
-		Prospecting += ProspectingGain;
-		Strenght += StrenghtGain;
+		Experience += 10 * interval;
+		if (Experience > 100)
+		{
+			Experience -= 100;
+			Level++;
+			Prospecting += ProspectingGain;
+			Strenght += StrenghtGain;
+		}
 	}
 
 	public void UpdateInfoPanel()

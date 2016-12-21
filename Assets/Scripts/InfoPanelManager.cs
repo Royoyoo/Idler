@@ -13,6 +13,8 @@ public class InfoPanelManager : MonoBehaviour {
 	public Button StateButton;
 	public Text StateText;
 
+	public GameObject InfoPanelGO;
+
 	public Hero SelectedHero;
 
 	public static InfoPanelManager instance;
@@ -28,6 +30,15 @@ public class InfoPanelManager : MonoBehaviour {
 		Ticker.OnTickEvent += UpdateUI;
 	}
 
+	public void Update()
+	{
+		if (Input.GetMouseButtonDown (1))
+		{
+			SelectedHero = null;
+			InfoPanelGO.SetActive (false);
+		}
+	}
+
 	public void UpdateUI(float interval)
 	{
 		if (SelectedHero != null)
@@ -36,6 +47,9 @@ public class InfoPanelManager : MonoBehaviour {
 
 	public void UpdateHeroInfo(Hero thisHero)
 	{
+		if (!InfoPanelGO.activeSelf)
+			InfoPanelGO.SetActive (true);
+
 		SelectedHero = thisHero;
 
 		NameText.text = thisHero.Name + " lvl" + thisHero.Level.ToString();
@@ -48,5 +62,25 @@ public class InfoPanelManager : MonoBehaviour {
 			StateText.text = thisHero.CurrentState.ToString();
 		else
 			StateText.text = thisHero.CurrentState.ToString() + " at " + thisHero.LocationAssigned.LocationName;
+	}
+
+	public void ChangeHeroState()
+	{
+		if (SelectedHero.CurrentState == HeroState.WORKING)
+		{
+			SelectedHero.CurrentState = HeroState.GUARD;
+			SelectedHero.LocationAssigned.HeroesWorking.Remove (SelectedHero);
+			SelectedHero.LocationAssigned.HeroesGuarding.Add (SelectedHero);
+		}
+		else if (SelectedHero.CurrentState == HeroState.GUARD)
+		{
+			SelectedHero.CurrentState = HeroState.IDLE;
+			SelectedHero.LocationAssigned.HeroesGuarding.Remove (SelectedHero);
+		}
+		else if (SelectedHero.CurrentState == HeroState.IDLE)
+		{
+			SelectedHero.CurrentState = HeroState.WORKING;
+			SelectedHero.LocationAssigned.HeroesWorking.Add (SelectedHero);
+		}
 	}
 }

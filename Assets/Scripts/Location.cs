@@ -12,6 +12,9 @@ public class Location : MonoBehaviour {
 	public int MastersBonus;
 	public float ManaIncome;
 
+	public float Threat;
+	public float ThreatGrowth;
+
 	public float UpgradeCostMultiplier;
 	public float UpgradeBonusMultiplier;
 
@@ -44,6 +47,8 @@ public class Location : MonoBehaviour {
 		LocationLevel = 1;
 		LocationMultiplier = 1;
 		MastersCount = 0;
+		Threat = 0;
+
 
 		locationUIManager.UpdateUI ();
 
@@ -76,7 +81,15 @@ public class Location : MonoBehaviour {
 	public void UpdateStats(float interval)
 	{
 		CurrentIncome = Mathf.RoundToInt (LocationMultiplier * BaseIncome);
-		MastersBonus = Mathf.RoundToInt (CurrentIncome * MastersCount * 0.2f);
+		MastersBonus = Mathf.RoundToInt (CurrentIncome * MastersCount * KingdomManager.instance.MastersMultiplier);
+
+		float threatReduction = 0f;
+
+		foreach (var h in HeroesGuarding)
+			threatReduction += h.Strenght * 0.2f;
+
+		Threat = Mathf.Max (0, Threat + ThreatGrowth - threatReduction);
+
 		locationUIManager.UpdateUI ();
 	}
 }
