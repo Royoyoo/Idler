@@ -25,6 +25,9 @@ public class Location : MonoBehaviour {
 	public List<Hero> HeroesGuarding = new List<Hero>();
 	public List<Enemy> EnemiesPresent = new List<Enemy>();
 
+	public float LastEnemyTime;
+	public int MaxEnemiesCount;
+
 	LocationUpgradesManager locationUpgradeMamager;
 	public LocationUIManager locationUIManager;
 
@@ -50,7 +53,7 @@ public class Location : MonoBehaviour {
 		LocationMultiplier = 1f;
 		MastersCount = 0;
 		Threat = 0f;
-
+		LastEnemyTime = Time.time;
 
 		locationUIManager.UpdateUI ();
 
@@ -86,8 +89,8 @@ public class Location : MonoBehaviour {
 			threatReduction += h.Strenght * 0.2f;
 
 		Threat = Mathf.Max (0f, Threat + (ThreatGrowth - threatReduction) * interval);
-		if (Threat > 50)
-			ThreatMultiplier = Mathf.Clamp (1 - (Threat - 50f) / 50f, 0f, 120f);
+		if (Threat > 50f)
+			ThreatMultiplier = Mathf.Clamp (1 - (Threat - 50f) / 50f, 0f, 1f);
 		else
 			ThreatMultiplier = 1;
 

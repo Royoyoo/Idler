@@ -106,7 +106,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114000013232386506}
+      - m_Target: {fileID: 114000013077414718}
         m_MethodName: UpdateInfoPanel
         m_Mode: 1
         m_Arguments:
@@ -258,10 +258,10 @@ MonoBehaviour:
   Strenght: 8
   StrenghtGain: 2
   Speed: 1.5
-  Stamina: 50
-  MaxStamina: 50
-  StaminaRecovery: 3
-  GoldToUnlock: 1000
+  Health: 0
+  MaxHealth: 50
+  HealthRecovery: 2
+  GoldToUnlock: 1500
   LocationAssigned: {fileID: 0}
   DefaultLocation: {fileID: 114000011223937194, guid: 088f87285d0458f409aab88562c572b7,
     type: 2}

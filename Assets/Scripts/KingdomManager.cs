@@ -58,7 +58,7 @@ public class KingdomManager : MonoBehaviour {
 		}
 
 		foreach (var h in ActiveHeroes) 
-			if (h.CurrentState == HeroState.WORKING && h.Stamina > 0)
+			if (h.CurrentState == HeroState.WORKING && h.Health > 0)
 				Gold += h.LocationAssigned.CurrentIncome * h.Prospecting * ProspectingMultiplier * h.LocationAssigned.ThreatMultiplier * GlobalMultiplier;
 
 		UpdateUI ();

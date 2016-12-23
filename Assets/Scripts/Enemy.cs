@@ -17,8 +17,7 @@ public class Enemy : MonoBehaviour {
 		if (Health < 0)
 		{
 			LocationAssigned.EnemiesPresent.Remove (this);
-			EnemiesManager.instance.CanSpawn = true;
-			EnemiesManager.instance.Timer = Time.time;
+			LocationAssigned.LastEnemyTime = Time.time;
 			Destroy (this.gameObject);
 		}
 	}

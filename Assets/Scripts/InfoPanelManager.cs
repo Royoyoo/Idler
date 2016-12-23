@@ -9,11 +9,11 @@ public class InfoPanelManager : MonoBehaviour {
 	public Text StrengthText;
 	public Text StaminaText;
 	public Text SpeedText;
-
-	public Button StateButton;
 	public Text StateText;
 
 	public GameObject InfoPanelGO;
+
+	public Button WorkButton, GuardButton, RestButton;
 
 	public Hero SelectedHero;
 
@@ -37,6 +37,22 @@ public class InfoPanelManager : MonoBehaviour {
 			SelectedHero = null;
 			InfoPanelGO.SetActive (false);
 		}
+			
+		if (SelectedHero != null)
+		{
+			if (SelectedHero.CurrentState == HeroState.MOVING) 
+			{
+				WorkButton.interactable = false;
+				GuardButton.interactable = false;
+				RestButton.interactable = false;
+			} 
+			else 
+			{
+				WorkButton.interactable = true;
+				GuardButton.interactable = true;
+				RestButton.interactable = true;
+			}
+		}
 	}
 
 	public void UpdateUI(float interval)
@@ -55,17 +71,27 @@ public class InfoPanelManager : MonoBehaviour {
 		NameText.text = thisHero.Name + " lvl" + thisHero.Level.ToString();
 		ProspectingText.text = "Prospect: " + thisHero.Prospecting.ToString();
 		StrengthText.text = "Strength: " + thisHero.Strenght.ToString();
-		StaminaText.text = "Stamina: " + thisHero.Stamina.ToString();
+		StaminaText.text = "Health: " + thisHero.Health.ToString();
 		SpeedText.text = "Speed: " + thisHero.Speed.ToString();
 
-		if(thisHero.CurrentState == HeroState.IDLE || thisHero.CurrentState == HeroState.MOVING)
+		if(thisHero.CurrentState == HeroState.REST || thisHero.CurrentState == HeroState.MOVING)
 			StateText.text = thisHero.CurrentState.ToString();
 		else
 			StateText.text = thisHero.CurrentState.ToString() + " at " + thisHero.LocationAssigned.LocationName;
 	}
 
-	public void ChangeHeroState()
+	public void SendToWork()
 	{
-		SelectedHero.ChangeState ();
+		SelectedHero.ChangeHeroState(HeroState.WORKING);
+	}
+
+	public void SendToGuard()
+	{
+		SelectedHero.ChangeHeroState(HeroState.GUARD);
+	}
+
+	public void SendToRest()
+	{
+		SelectedHero.ChangeHeroState(HeroState.REST);
 	}
 }

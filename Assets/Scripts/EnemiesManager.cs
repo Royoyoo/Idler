@@ -4,8 +4,6 @@ using System.Collections;
 public class EnemiesManager : MonoBehaviour {
 
 	public float SpawnRate;
-	public float Timer;
-	public bool CanSpawn;
 	public GameObject EnemyGO;
 	public Transform EnemiesParent;
 
@@ -18,28 +16,23 @@ public class EnemiesManager : MonoBehaviour {
 		else if (instance != this)
 				Destroy (this);
 
-		CanSpawn = true;
+		Ticker.OnTickEvent += CheckSpawns;
 	}
 
-	void Update()
+	void CheckSpawns(float interval)
 	{
-		if (CanSpawn && Timer + SpawnRate < Time.time)
-			SpawnEnemies ();
+		foreach(var l in KingdomManager.instance.ActiveLocations)
+			if(l.Threat > 100 && l.LastEnemyTime + SpawnRate < Time.time && l.EnemiesPresent.Count < l.MaxEnemiesCount)
+				SpawnEnemy (l);
 	}
 
-	public void SpawnEnemies()
+	public void SpawnEnemy(Location targetLocation)
 	{
-		foreach (var l in KingdomManager.instance.ActiveLocations)
-		{
-			if (l.Threat > 100f && l.EnemiesPresent.Count == 0)
-			{
-				GameObject thisEnemyGO = (GameObject)Instantiate (EnemyGO, EnemiesParent);
-				thisEnemyGO.transform.position = l.transform.position;	//!!!!!
-				var thisEnemy = thisEnemyGO.GetComponent<Enemy> ();
-				thisEnemy.LocationAssigned = l;
-				l.EnemiesPresent.Add (thisEnemy);
-				CanSpawn = false;
-			}
-		}
+		GameObject thisEnemyGO = (GameObject)Instantiate (EnemyGO, EnemiesParent);
+		thisEnemyGO.transform.position = targetLocation.transform.position;	//!!!!!
+		var thisEnemy = thisEnemyGO.GetComponent<Enemy> ();
+		thisEnemy.LocationAssigned = targetLocation;
+		targetLocation.EnemiesPresent.Add (thisEnemy);
+		targetLocation.LastEnemyTime = Time.time;
 	}
 }

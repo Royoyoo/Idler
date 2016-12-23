@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum HeroState {IDLE, WORKING, GUARD, MOVING, FIGHTING}
+public enum HeroState {REST, WORKING, GUARD, MOVING}
 
 public class Hero : MonoBehaviour {
 
@@ -14,9 +14,9 @@ public class Hero : MonoBehaviour {
 	public int StrenghtGain;
 	public float Speed;
 
-	public float Stamina;
-	public float MaxStamina;
-	public float StaminaRecovery;
+	public float Health;
+	public float MaxHealth;
+	public float HealthRecovery;
 
 	public int GoldToUnlock;
 
@@ -33,114 +33,87 @@ public class Hero : MonoBehaviour {
 		heroUIManager = GetComponent<HeroUIManager> ();
 
 		Level = 1;
-		Experience = 0;
-		Stamina = MaxStamina;
-		CurrentState = HeroState.IDLE;
-		previousState = HeroState.IDLE;
-		LocationAssigned = KingdomManager.instance.ActiveLocations.Find(l => l.LocationUID == DefaultLocation.LocationUID);
+		Experience = 0f;
+		Health = MaxHealth;
+		CurrentState = HeroState.REST;
+		previousState = HeroState.REST;
+		LocationAssigned = DefaultLocation = KingdomManager.instance.ActiveLocations.Find(l => l.LocationUID == DefaultLocation.LocationUID);
 
 		KingdomManager.instance.ActiveHeroes.Add (this);
 
 		Ticker.OnTickEvent += UpdateHeroStats;
 	}
-
-	//When Dropped Hero On Location |||| REWORK STATE-CHANGING METHOD
-	public void AssignHero (Location targetLocation) 
+		
+	public void ChangeHeroState(HeroState newState)
 	{
-		LocationAssigned = targetLocation;
-
 		switch (CurrentState)
 		{
-		case HeroState.WORKING:
-			LocationAssigned.HeroesWorking.Add (this);
-			break;
+			case HeroState.WORKING:
+				LocationAssigned.HeroesWorking.Remove (this);
+				break;
 
-		case HeroState.GUARD:
-			LocationAssigned.HeroesGuarding.Add (this);
-			break;
+			case HeroState.GUARD:
+				LocationAssigned.HeroesGuarding.Remove (this);
+				break;
 
-		case HeroState.FIGHTING:
-			LocationAssigned.HeroesGuarding.Add (this);
-			break;
-
-		default:
-			break;
+			default:
+				break;
 		}
+
+		if(CurrentState != HeroState.REST && CurrentState != HeroState.MOVING)
+			previousState = CurrentState;
+
+		switch (newState)
+		{
+			case HeroState.WORKING:
+				LocationAssigned.HeroesWorking.Add (this);
+				break;
+
+			case HeroState.GUARD:
+				LocationAssigned.HeroesGuarding.Add (this);
+				break;
+
+			default:
+				break;
+		}
+
+		CurrentState = newState;
 	}
-		
+
 	public void UpdateHeroStats(float interval)
 	{
 		if (CurrentState == HeroState.WORKING || CurrentState == HeroState.GUARD)
-		{
-			Stamina = Mathf.Max(Stamina - 5f * interval, 0f);
 			UpdateExp (interval);
-		}
 
-		if (CurrentState == HeroState.FIGHTING && LocationAssigned.EnemiesPresent.Count == 0)
-			CurrentState = HeroState.GUARD;
-
-		if (Stamina <= 0)
+		if (Health <= 0f)
 		{
-			if (CurrentState == HeroState.WORKING)
-				LocationAssigned.HeroesWorking.Remove (this);
-			else if (CurrentState == HeroState.GUARD || CurrentState == HeroState.FIGHTING)
-				LocationAssigned.HeroesGuarding.Remove (this);
-
-			previousState = CurrentState;
-			CurrentState = HeroState.IDLE;
+			ChangeHeroState (HeroState.REST);
+			InstantMove (DefaultLocation);
+			Health = 0f;
 		}
 
-		if (CurrentState == HeroState.IDLE && Stamina < MaxStamina)
-		{
-			Stamina = Mathf.Min (Stamina + StaminaRecovery * interval, MaxStamina);
-			if (previousState != HeroState.IDLE && Stamina >= MaxStamina)
-			{
-				CurrentState = previousState;
-				previousState = HeroState.IDLE;
-				AssignHero (LocationAssigned);
-			}
-		}
+		if (Health < MaxHealth && LocationAssigned.EnemiesPresent.Count == 0)
+			Health = Mathf.Min (Health + HealthRecovery * interval, MaxHealth);
 
 		heroUIManager.UpdateUI ();
 	}
-		
-	public void ChangeState()
-	{
-		if (CurrentState == HeroState.WORKING) 
-		{
-			CurrentState = HeroState.GUARD;
-			LocationAssigned.HeroesWorking.Remove (this);
-			AssignHero (LocationAssigned);
-		} 
-		else if (CurrentState == HeroState.GUARD)
-		{
-			CurrentState = HeroState.IDLE;
-			previousState = HeroState.IDLE;
-			LocationAssigned.HeroesGuarding.Remove (this);
-			AssignHero (LocationAssigned);
-		}
-		else if (CurrentState == HeroState.IDLE)
-		{
-			CurrentState = HeroState.WORKING;
-			AssignHero (LocationAssigned);
-		}
-	}
 
-	public void UpdateExp (float interval)
+	void UpdateExp (float interval)
 	{
-		Experience += 10 * interval;
-		if (Experience > 100)
+		Experience += 10f * interval;
+		if (Experience > 100f)
 		{
-			Experience -= 100;
+			Experience -= 100f;
 			Level++;
 			Prospecting += ProspectingGain;
 			Strenght += StrenghtGain;
 		}
 	}
 
-	public void UpdateInfoPanel()
+	public void InstantMove(Location targetLocation)
 	{
-		InfoPanelManager.instance.UpdateHeroInfo (this);
+		transform.position = targetLocation.locationUIManager.HeroPanelTransform.position;
+		LocationAssigned = targetLocation;
 	}
 
 	public IEnumerator MoveHero(Location finalLocation)
@@ -153,14 +126,7 @@ public class Hero : MonoBehaviour {
 		Vector3 nextLocationPosition;
 		Vector3 currentPosition = LocationAssigned.locationUIManager.HeroPanelTransform.position;
 
-		if (CurrentState == HeroState.WORKING)
-			LocationAssigned.HeroesWorking.Remove (this);
-		else if (CurrentState == HeroState.GUARD)
-			LocationAssigned.HeroesGuarding.Remove (this);
-
-		HeroState previousState;
-		previousState = CurrentState;
-		CurrentState = HeroState.MOVING;
+		ChangeHeroState(HeroState.MOVING);
 
 		do {
 			float dist;
@@ -169,7 +135,7 @@ public class Hero : MonoBehaviour {
 
 			dist /= Speed;
 
-			float t = 0;
+			float t = 0f;
 			while (t < dist)
 			{
 				transform.position = Vector3.Lerp (currentPosition, nextLocationPosition, t / dist);
@@ -180,9 +146,10 @@ public class Hero : MonoBehaviour {
 			currentPosition = nextLocationPosition;
 
 		} while (nextLocation != finalLocation);
+			
+		transform.position = nextLocationPosition;
 
-		CurrentState = previousState;
-
-		AssignHero (finalLocation);
+		LocationAssigned = finalLocation;
+		ChangeHeroState(previousState);
 	}
 }

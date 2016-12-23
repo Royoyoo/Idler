@@ -7,11 +7,11 @@ public class TimedHeroRegenSO : BaseSpellSO {
 	public override void Execute (Spell thisSpell, GameObject target)
 	{
 		var h = target.GetComponent<Hero> ();
-		h.StaminaRecovery *= thisSpell.Value1;
+		h.HealthRecovery *= thisSpell.Value1;
 	}
 	public override void Revert (Spell thisSpell, GameObject target)
 	{
 		var h2 = target.GetComponent<Hero> ();
-		h2.StaminaRecovery /= thisSpell.Value1;
+		h2.HealthRecovery /= thisSpell.Value1;
 	}	
 }

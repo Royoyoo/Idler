@@ -28,7 +28,7 @@ public class HeroUIManager : MonoBehaviour {
 
 		if (thisHero.CurrentState == HeroState.WORKING)
 		{			
-			if(thisHero.Stamina > 0)
+			if(thisHero.Health > 0)
 				EffectText.text = thisHero.LocationAssigned.CurrentIncome * thisHero.Prospecting * 
 					KingdomManager.instance.ProspectingMultiplier * KingdomManager.instance.GlobalMultiplier + "g";
 			else
@@ -37,20 +37,20 @@ public class HeroUIManager : MonoBehaviour {
 
 		if (thisHero.CurrentState == HeroState.GUARD)
 		{
-			if(thisHero.Stamina > 0)
+			if(thisHero.Health > 0)
 				EffectText.text = thisHero.Strenght + " str";
 			else
 				EffectText.text = "powerless";
 		}	
 
-		if(thisHero.CurrentState == HeroState.IDLE)
+		if(thisHero.CurrentState == HeroState.REST)
 		{
 			EffectText.text = "Resting...";
 		}
+	}
 
-		if(thisHero.CurrentState == HeroState.FIGHTING)
-		{
-			EffectText.text = "In a fight!";
-		}
+	public void UpdateInfoPanel()
+	{
+		InfoPanelManager.instance.UpdateHeroInfo (thisHero);
 	}
 }

@@ -415,6 +415,7 @@ MonoBehaviour:
   UpgradeText: {fileID: 114000012924735790}
   MastersText: {fileID: 114000012193425550}
   HeroPanelTransform: {fileID: 224000011799978316}
+  EnemyPanelTransform: {fileID: 0}
   thisLocation: {fileID: 0}
 --- !u!114 &114000012182840806
 MonoBehaviour:
@@ -614,11 +615,18 @@ MonoBehaviour:
   UpgradeBonus: 5
   CurrentIncome: 5
   MastersBonus: 0
+  ManaIncome: 0
+  Threat: 0
+  ThreatGrowth: 0
+  ThreatMultiplier: 0
   UpgradeCostMultiplier: 0.3
   UpgradeBonusMultiplier: 0.25
   GoldToUnlock: 1100
   HeroesWorking: []
   HeroesGuarding: []
+  EnemiesPresent: []
+  LastEnemyTime: 0
+  MaxEnemiesCount: 3
   locationUIManager: {fileID: 0}
 --- !u!114 &114000013802090178
 MonoBehaviour:
