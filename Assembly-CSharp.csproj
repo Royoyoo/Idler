@@ -45,8 +45,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\BattlesManager.cs" />
+     <Compile Include="Assets\Scripts\EnemiesManager.cs" />
+     <Compile Include="Assets\Scripts\Enemy.cs" />
      <Compile Include="Assets\Scripts\Hero.cs" />
      <Compile Include="Assets\Scripts\HeroDragManager.cs" />
+     <Compile Include="Assets\Scripts\HeroUIManager.cs" />
      <Compile Include="Assets\Scripts\InfoPanelManager.cs" />
      <Compile Include="Assets\Scripts\KingdomManager.cs" />
      <Compile Include="Assets\Scripts\Location.cs" />

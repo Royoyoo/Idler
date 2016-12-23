@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 
-public enum HeroState {IDLE, WORKING, GUARD, MOVING}
+public enum HeroState {IDLE, WORKING, GUARD, MOVING, FIGHTING}
 
 public class Hero : MonoBehaviour {
 
@@ -25,105 +24,43 @@ public class Hero : MonoBehaviour {
 	public Location DefaultLocation;
 
 	public HeroState CurrentState;
+	HeroState previousState;
 
-	public Transform HeroIdleTransform;
-	public Transform ParentTransform;
-	public Text NameText;
-	public Text EffectText;
+	public HeroUIManager heroUIManager;
 
 	void Start ()
 	{
-		Stamina = MaxStamina;
-		NameText.text = Name;
-		HeroIdleTransform = UnlocksManager.instance.HeroesIdleParent;
-		ParentTransform = HeroIdleTransform;
-		this.transform.SetParent (ParentTransform);
-		transform.localPosition = new Vector3 (0f, 50 - HeroIdleTransform.childCount * 50f, 0f);
+		heroUIManager = GetComponent<HeroUIManager> ();
+
 		Level = 1;
 		Experience = 0;
+		Stamina = MaxStamina;
 		CurrentState = HeroState.IDLE;
+		previousState = HeroState.IDLE;
+		LocationAssigned = KingdomManager.instance.ActiveLocations.Find(l => l.LocationUID == DefaultLocation.LocationUID);
 
 		KingdomManager.instance.ActiveHeroes.Add (this);
 
 		Ticker.OnTickEvent += UpdateHeroStats;
 	}
 
-	//When Dropped Hero On Location
-	//Rework this method!!!
+	//When Dropped Hero On Location |||| REWORK STATE-CHANGING METHOD
 	public void AssignHero (Location targetLocation) 
 	{
-		switch (CurrentState) 
+		LocationAssigned = targetLocation;
+
+		switch (CurrentState)
 		{
-		case HeroState.IDLE:
-
-			if (!targetLocation)
-				return;
-
-			CurrentState = HeroState.WORKING;
-
-			LocationAssigned = targetLocation;
-				ParentTransform = LocationAssigned.locationUIManager.HeroPanelTransform;
-			this.transform.SetParent (ParentTransform);
-			this.transform.localPosition = new Vector3 (0f, 0f, 0f);
-
+		case HeroState.WORKING:
 			LocationAssigned.HeroesWorking.Add (this);
 			break;
 
-		case HeroState.WORKING:
-
-			if (!targetLocation)
-			{
-				CurrentState = HeroState.IDLE;
-
-				ParentTransform = HeroIdleTransform;
-				this.transform.SetParent (ParentTransform);
-				transform.localPosition = new Vector3 (0f, 50 - HeroIdleTransform.childCount * 50f, 0f);
-
-				LocationAssigned.HeroesWorking.Remove (this);
-				LocationAssigned = null;
-				EffectText.text = "";
-			}
-			else
-			{
-				LocationAssigned.HeroesWorking.Remove (this);
-
-				LocationAssigned = targetLocation;
-				ParentTransform = LocationAssigned.locationUIManager.HeroPanelTransform;
-				this.transform.SetParent (ParentTransform);
-				this.transform.localPosition = new Vector3 (0f, 0f, 0f);
-
-				LocationAssigned.HeroesWorking.Add (this);
-			}
-			break;
-
 		case HeroState.GUARD:
-				
-			if (!targetLocation)
-			{
-				CurrentState = HeroState.IDLE;
-
-				ParentTransform = HeroIdleTransform;
-				this.transform.SetParent (ParentTransform);
-				transform.localPosition = new Vector3 (0f, 50 - HeroIdleTransform.childCount * 50f, 0f);
-
-				LocationAssigned.HeroesGuarding.Remove (this);
-				LocationAssigned = null;
-				EffectText.text = "";
-			}
-			else
-			{
-				LocationAssigned.HeroesGuarding.Remove (this);
-
-				LocationAssigned = targetLocation;
-				ParentTransform = LocationAssigned.locationUIManager.HeroPanelTransform;
-				this.transform.SetParent (ParentTransform);
-				this.transform.localPosition = new Vector3 (0f, 0f, 0f);
-
-				LocationAssigned.HeroesGuarding.Add (this);
-			}
+			LocationAssigned.HeroesGuarding.Add (this);
 			break;
 
-		case HeroState.MOVING:
+		case HeroState.FIGHTING:
+			LocationAssigned.HeroesGuarding.Add (this);
 			break;
 
 		default:
@@ -131,80 +68,61 @@ public class Hero : MonoBehaviour {
 		}
 	}
 		
-	public IEnumerator MoveHero(Location finalLocation)
+	public void UpdateHeroStats(float interval)
 	{
-		if (finalLocation != LocationAssigned)
+		if (CurrentState == HeroState.WORKING || CurrentState == HeroState.GUARD)
 		{
-			Location currentLocation = LocationAssigned;
+			Stamina = Mathf.Max(Stamina - 5f * interval, 0f);
+			UpdateExp (interval);
+		}
 
-			if (!LocationAssigned)
-				currentLocation = DefaultLocation;				
+		if (CurrentState == HeroState.FIGHTING && LocationAssigned.EnemiesPresent.Count == 0)
+			CurrentState = HeroState.GUARD;
 
-			Location nextLocation;
-			Vector3 nextLocationPosition;
-			Vector3 currentPosition = ParentTransform.position;
-			HeroState previousState;
-
+		if (Stamina <= 0)
+		{
 			if (CurrentState == HeroState.WORKING)
 				LocationAssigned.HeroesWorking.Remove (this);
-			else if (CurrentState == HeroState.GUARD)
+			else if (CurrentState == HeroState.GUARD || CurrentState == HeroState.FIGHTING)
 				LocationAssigned.HeroesGuarding.Remove (this);
 
 			previousState = CurrentState;
-			CurrentState = HeroState.MOVING;
-
-			do {
-				float dist;
-				nextLocation = MapNavigator.instance.NextDestination (currentLocation, finalLocation, out dist);
-				nextLocationPosition = nextLocation.transform.position;
-
-				dist /= Speed;
-
-				float t = 0;
-				while (t < dist) {
-					transform.position = Vector3.Lerp (currentPosition, nextLocationPosition, t / dist);
-					t += Time.deltaTime;
-					yield return null;
-				}
-				currentLocation = nextLocation;
-				currentPosition = nextLocationPosition;
-
-			} while (nextLocation != finalLocation);
-
-			CurrentState = previousState;
-
-			AssignHero (finalLocation);
+			CurrentState = HeroState.IDLE;
 		}
+
+		if (CurrentState == HeroState.IDLE && Stamina < MaxStamina)
+		{
+			Stamina = Mathf.Min (Stamina + StaminaRecovery * interval, MaxStamina);
+			if (previousState != HeroState.IDLE && Stamina >= MaxStamina)
+			{
+				CurrentState = previousState;
+				previousState = HeroState.IDLE;
+				AssignHero (LocationAssigned);
+			}
+		}
+
+		heroUIManager.UpdateUI ();
 	}
-
-	public void UpdateHeroStats(float interval)
+		
+	public void ChangeState()
 	{
-		if (CurrentState == HeroState.WORKING)
+		if (CurrentState == HeroState.WORKING) 
 		{
-			Stamina = Mathf.Max(Stamina - 5f * interval, 0f);
-			if(Stamina > 0)
-				EffectText.text = LocationAssigned.CurrentIncome * Prospecting * KingdomManager.instance.ProspectingMultiplier * KingdomManager.instance.GlobalMultiplier + "g";
-			else
-				EffectText.text = "0g";
-			
-			UpdateExp (interval);
+			CurrentState = HeroState.GUARD;
+			LocationAssigned.HeroesWorking.Remove (this);
+			AssignHero (LocationAssigned);
+		} 
+		else if (CurrentState == HeroState.GUARD)
+		{
+			CurrentState = HeroState.IDLE;
+			previousState = HeroState.IDLE;
+			LocationAssigned.HeroesGuarding.Remove (this);
+			AssignHero (LocationAssigned);
 		}
-
-		if (CurrentState == HeroState.GUARD)
+		else if (CurrentState == HeroState.IDLE)
 		{
-			Stamina = Mathf.Max (Stamina - 5f * interval, 0f);
-			if(Stamina > 0)
-				EffectText.text = Strenght + " str";
-			else
-				EffectText.text = "powerless";
-			
-			UpdateExp (interval);
-		}	
-
-		if(CurrentState == HeroState.IDLE && Stamina < MaxStamina)
-		{
-			Stamina = Mathf.Min(Stamina + StaminaRecovery * interval, MaxStamina);
-			EffectText.text = "Resting...";
+			CurrentState = HeroState.WORKING;
+			AssignHero (LocationAssigned);
 		}
 	}
 
@@ -223,5 +141,48 @@ public class Hero : MonoBehaviour {
 	public void UpdateInfoPanel()
 	{
 		InfoPanelManager.instance.UpdateHeroInfo (this);
+	}
+
+	public IEnumerator MoveHero(Location finalLocation)
+	{
+		if (finalLocation == LocationAssigned)
+			yield break;
+
+		Location currentLocation = LocationAssigned;
+		Location nextLocation;
+		Vector3 nextLocationPosition;
+		Vector3 currentPosition = LocationAssigned.locationUIManager.HeroPanelTransform.position;
+
+		if (CurrentState == HeroState.WORKING)
+			LocationAssigned.HeroesWorking.Remove (this);
+		else if (CurrentState == HeroState.GUARD)
+			LocationAssigned.HeroesGuarding.Remove (this);
+
+		HeroState previousState;
+		previousState = CurrentState;
+		CurrentState = HeroState.MOVING;
+
+		do {
+			float dist;
+			nextLocation = MapNavigator.instance.NextDestination (currentLocation, finalLocation, out dist);
+			nextLocationPosition = nextLocation.locationUIManager.HeroPanelTransform.position;
+
+			dist /= Speed;
+
+			float t = 0;
+			while (t < dist)
+			{
+				transform.position = Vector3.Lerp (currentPosition, nextLocationPosition, t / dist);
+				t += Time.deltaTime;
+				yield return null;
+			}
+			currentLocation = nextLocation;
+			currentPosition = nextLocationPosition;
+
+		} while (nextLocation != finalLocation);
+
+		CurrentState = previousState;
+
+		AssignHero (finalLocation);
 	}
 }

@@ -407,6 +407,8 @@ GameObject:
   - 114: {fileID: 507159113}
   - 114: {fileID: 507159112}
   - 114: {fileID: 507159110}
+  - 114: {fileID: 507159114}
+  - 114: {fileID: 507159115}
   m_Layer: 0
   m_Name: GameManagers
   m_TagString: Untagged
@@ -437,7 +439,7 @@ MonoBehaviour:
   - {fileID: 114000013232386506, guid: 33a30f6d700e65d42ae779757b9cf4f1, type: 2}
   - {fileID: 114000013232386506, guid: f628ff35c4cf1f34bae61fda379dbe32, type: 2}
   LocationsParent: {fileID: 190303480}
-  HeroesIdleParent: {fileID: 1947757987}
+  HeroesPanel: {fileID: 1947757987}
 --- !u!114 &507159110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -573,6 +575,35 @@ MonoBehaviour:
   ManaText: {fileID: 1578106170}
   ActiveLocations: []
   ActiveHeroes: []
+--- !u!114 &507159114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 507159108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c45fc4c314c0dd7478e94d2db751c1e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpawnRate: 10
+  Timer: 0
+  CanSpawn: 0
+  EnemyGO: {fileID: 1000012837489954, guid: e8a21b8b2bf67954e9c977a0d5266181, type: 2}
+  EnemiesParent: {fileID: 1598719321}
+--- !u!114 &507159115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 507159108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18c52ee3ea091cc4cb3df9556d76db7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RoundDuration: 2
+  RoundTimer: 0
 --- !u!224 &507159116
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1135,6 +1166,7 @@ RectTransform:
   - {fileID: 1503811688}
   - {fileID: 1947757987}
   - {fileID: 1465602626}
+  - {fileID: 1598719321}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0}
@@ -1657,6 +1689,46 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1578106168}
+--- !u!1 &1598719320
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 1598719321}
+  - 222: {fileID: 1598719322}
+  m_Layer: 5
+  m_Name: EnemiesPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1598719321
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1598719320}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 1157375518}
+  m_RootOrder: 4
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1598719322
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1598719320}
 --- !u!1 &1633274500
 GameObject:
   m_ObjectHideFlags: 0

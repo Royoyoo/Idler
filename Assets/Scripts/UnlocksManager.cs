@@ -9,7 +9,7 @@ public class UnlocksManager : MonoBehaviour {
 	public List<Hero> HeroesPrefabs = new List<Hero> ();
 
 	public Transform LocationsParent;
-	public Transform HeroesIdleParent;
+	public Transform HeroesPanel;
 
 	private List<Location> LocationToRemove = new List<Location> ();
 	private List<Hero> HeroToRemove = new List<Hero> ();

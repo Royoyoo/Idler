@@ -14,10 +14,7 @@ public class LocationDropManager : MonoBehaviour, IDropHandler {
 //		}
 
 		var targetLocation = GetComponent<Location> ();
-		if(targetLocation == null)
-			eventData.pointerDrag.GetComponent<Hero> ().AssignHero(targetLocation);
-		else
+		if(targetLocation != null)
 			eventData.pointerDrag.GetComponent<Hero> ().StartCoroutine("MoveHero", targetLocation);
-
 	}
 }

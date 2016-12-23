@@ -66,21 +66,6 @@ public class InfoPanelManager : MonoBehaviour {
 
 	public void ChangeHeroState()
 	{
-		if (SelectedHero.CurrentState == HeroState.WORKING)
-		{
-			SelectedHero.CurrentState = HeroState.GUARD;
-			SelectedHero.LocationAssigned.HeroesWorking.Remove (SelectedHero);
-			SelectedHero.LocationAssigned.HeroesGuarding.Add (SelectedHero);
-		}
-		else if (SelectedHero.CurrentState == HeroState.GUARD)
-		{
-			SelectedHero.CurrentState = HeroState.IDLE;
-			SelectedHero.LocationAssigned.HeroesGuarding.Remove (SelectedHero);
-		}
-		else if (SelectedHero.CurrentState == HeroState.IDLE)
-		{
-			SelectedHero.CurrentState = HeroState.WORKING;
-			SelectedHero.LocationAssigned.HeroesWorking.Add (SelectedHero);
-		}
+		SelectedHero.ChangeState ();
 	}
 }

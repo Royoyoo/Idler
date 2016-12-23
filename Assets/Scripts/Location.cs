@@ -14,6 +14,7 @@ public class Location : MonoBehaviour {
 
 	public float Threat;
 	public float ThreatGrowth;
+	public float ThreatMultiplier;
 
 	public float UpgradeCostMultiplier;
 	public float UpgradeBonusMultiplier;
@@ -22,6 +23,7 @@ public class Location : MonoBehaviour {
 
 	public List<Hero> HeroesWorking = new List<Hero>();
 	public List<Hero> HeroesGuarding = new List<Hero>();
+	public List<Enemy> EnemiesPresent = new List<Enemy>();
 
 	LocationUpgradesManager locationUpgradeMamager;
 	public LocationUIManager locationUIManager;
@@ -45,9 +47,9 @@ public class Location : MonoBehaviour {
 
 		BaseIncome = CurrentIncome;
 		LocationLevel = 1;
-		LocationMultiplier = 1;
+		LocationMultiplier = 1f;
 		MastersCount = 0;
-		Threat = 0;
+		Threat = 0f;
 
 
 		locationUIManager.UpdateUI ();
@@ -56,8 +58,7 @@ public class Location : MonoBehaviour {
 		MapNavigator.instance.BuildPaths ();
 
 		Ticker.OnTickEvent += UpdateStats;
-	}
-			
+	}			
 
 	public void BuyUpgrade()
 	{
@@ -75,20 +76,23 @@ public class Location : MonoBehaviour {
 
 		locationUIManager.UpdateUI ();
 	}
-
-
+		
 	//Called when buying upgrade & adding/removing workers
 	public void UpdateStats(float interval)
 	{
-		CurrentIncome = Mathf.RoundToInt (LocationMultiplier * BaseIncome);
-		MastersBonus = Mathf.RoundToInt (CurrentIncome * MastersCount * KingdomManager.instance.MastersMultiplier);
-
 		float threatReduction = 0f;
 
 		foreach (var h in HeroesGuarding)
 			threatReduction += h.Strenght * 0.2f;
 
-		Threat = Mathf.Max (0, Threat + ThreatGrowth - threatReduction);
+		Threat = Mathf.Max (0f, Threat + (ThreatGrowth - threatReduction) * interval);
+		if (Threat > 50)
+			ThreatMultiplier = Mathf.Clamp (1 - (Threat - 50f) / 50f, 0f, 120f);
+		else
+			ThreatMultiplier = 1;
+
+		CurrentIncome = Mathf.RoundToInt (LocationMultiplier * BaseIncome);
+		MastersBonus = Mathf.RoundToInt (CurrentIncome * MastersCount * KingdomManager.instance.MastersMultiplier);
 
 		locationUIManager.UpdateUI ();
 	}

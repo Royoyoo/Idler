@@ -1,13 +1,17 @@
 ﻿<Properties RefactoringSettings.EnableRefactorings="True" StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Ticker.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\InfoPanelManager.cs">
     <Files>
-      <File FileName="Assets\Scripts\Location.cs" Line="86" Column="29" />
-      <File FileName="Assets\Scripts\Hero.cs" Line="174" Column="33" />
-      <File FileName="Assets\Scripts\KingdomManager.cs" Line="64" Column="15" />
-      <File FileName="Assets\Scripts\InfoPanelManager.cs" Line="78" Column="71" />
-      <File FileName="Assets\Scripts\SpellsManager.cs" Line="104" Column="38" />
-      <File FileName="Assets\Scripts\Ticker.cs" Line="33" Column="31" />
+      <File FileName="Assets\Scripts\Location.cs" Line="97" Column="33" />
+      <File FileName="Assets\Scripts\Hero.cs" Line="76" Column="25" />
+      <File FileName="Assets\Scripts\HeroUIManager.cs" Line="18" Column="2" />
+      <File FileName="Assets\Scripts\KingdomManager.cs" Line="56" Column="62" />
+      <File FileName="Assets\Scripts\InfoPanelManager.cs" Line="64" Column="104" />
+      <File FileName="Assets\Scripts\LocationUIManager.cs" Line="12" Column="39" />
+      <File FileName="Assets\Scripts\Enemy.cs" Line="21" Column="46" />
+      <File FileName="Assets\Scripts\EnemiesManager.cs" Line="26" Column="49" />
+      <File FileName="Assets\Scripts\BattlesManager.cs" Line="46" Column="42" />
+      <File FileName="Assets\Scripts\Ticker.cs" Line="34" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
